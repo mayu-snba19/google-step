@@ -1,8 +1,0 @@
-[large]
-You answer is correct! Your score is 906232.
-
-[medium]
-You answer is correct! Your score is 495100.
-
-[small]
-You answer is correct! Your score is 23731.

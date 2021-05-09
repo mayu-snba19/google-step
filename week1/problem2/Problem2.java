@@ -1,13 +1,12 @@
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collectors;
 import java.io.*;
 
 class Counter {
-  char c[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'l', 'o', 'p', 'q', 'r', 's', 't', 'u',
+  char c[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
       'v', 'w', 'x', 'y', 'z' };
   int count[];
 
+  //単語に含まれるアルファベットの個数を数える
   public int[] counter(String s) {
     count = new int[26];
     for (int i = 0; i < s.length(); i++) {
@@ -37,16 +36,15 @@ public class Problem2 {
 
   static void solve() {
 
-    ArrayList<String> targets = new ArrayList<String>();
+    ArrayList<String> targets = new ArrayList<String>(); //small.txtなどから与えられた文字列を格納
     File file = new File(filename + ".txt");
-    Set<String> ans = new HashSet<String>();
+    ArrayList<String> ans = new ArrayList<String>();
+    int charScore[] = {1, 3, 2, 2, 1, 3, 3, 1, 1, 4, 4, 2, 2, 1, 1, 3, 4, 1, 1, 1, 2, 3, 3, 4, 3, 4};
 
     try {
       BufferedReader br = new BufferedReader(new FileReader(file));
-      int cnt=0;
-      while (br.ready() && cnt<=1000) {
+      while (br.ready()) {
         String s = br.readLine();
-        cnt++;
         targets.add(s);
       }
       br.close();
@@ -55,24 +53,38 @@ public class Problem2 {
     }
 
     Counter c = new Counter();
-    int len=Math.min(targets.get(0).length(), 7);
 
     for (String target : targets) {
       int[] targetCnt = c.counter(target);
+      int maxScore=0;
+      String nowAns="";
+
+      //辞書ファイルからアナグラムを見つける
       try {
         BufferedReader br = new BufferedReader(new FileReader("words.txt"));
         while (br.ready()) {
           String s = br.readLine();
+          int nowScore=0;
+          boolean boo=true;
+
+          if(s.length()*4<maxScore) continue;
           int[] wordCnt = c.counter(s);
-          boolean boo = true;
-          int cnt=0;
+
           for (int i = 0; i < 26; i++) {
-            if (targetCnt[i] < wordCnt[i]) boo = false;
-            cnt+=wordCnt[i];
+            //この単語は作れないのでスキップ
+            if (targetCnt[i] < wordCnt[i]){
+              boo=false;
+              break;
+            }
+            nowScore+=wordCnt[i]*charScore[i];
           }
-          if (boo && cnt>=len)
-            ans.add(s);
+          //高いスコアのものに更新
+          if(boo && nowScore>maxScore){
+            maxScore=nowScore;
+            nowAns=s;
+          }
         }
+        ans.add(nowAns);
         br.close();
       } catch (Exception e) {
         System.out.println(e);
