@@ -2,7 +2,18 @@
  * 与えられた文字列のAnagramを辞書ファイルから探して返すプログラム
  */
 
+import java.io.*;
 import java.util.*;
+
+class Pair {
+  String word;
+  String sortword;
+
+  public Pair(String word, String sortword) {
+    this.word = word;
+    this.sortword = sortword;
+  }
+}
 
 public class Problem1 {
 
@@ -12,12 +23,24 @@ public class Problem1 {
 
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
+
+    File newwordsFile = new File("newwords.txt");
+    if(!newwordsFile.exists()) makeNewDictionary(newwordsFile);
+
     arr1= new String[MAX];
     arr2 = new String[MAX];
-
-    for (int i = 0; i < MAX; i++) {
-      arr1[i] = sc.next();
-      arr2[i] = sc.next();
+    try {
+      BufferedReader br=new BufferedReader(new FileReader(newwordsFile));
+      int i=0;
+      while(br.ready()){
+        String s=br.readLine();
+        arr1[i]=s.split(" ")[0];
+        arr2[i]=s.split(" ")[1];
+        i++;
+      }
+      br.close();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
     //検索対象
@@ -27,7 +50,34 @@ public class Problem1 {
       String ans=binarySearch(target);
       if(!ans.equals(target) && !ans.equals("")) System.out.println(target+" "+ans);
     }
+  }
 
+  //ソート済みの辞書を作成する
+  static void makeNewDictionary(File newwordsFile){
+    try{
+      File wordsFile=new File("words.txt");
+      BufferedReader br=new BufferedReader(new FileReader(wordsFile));
+      ArrayList<Pair> arr = new ArrayList<Pair>();
+
+      for (int i = 0; i < MAX; i++) {
+        String word = br.readLine();
+        char[] c = word.toCharArray();
+        Arrays.sort(c);
+        String sortword = new String(c);
+        arr.add(new Pair(word, sortword));
+      }
+      arr.sort((a, b) -> a.sortword.compareTo(b.sortword));
+      BufferedWriter bw=new BufferedWriter(new FileWriter(newwordsFile));
+      for(Pair p:arr){
+        bw.write(p.sortword + " " + p.word);
+        bw.newLine();
+      }
+      br.close();
+      bw.close();
+
+    }catch(IOException e){
+      e.printStackTrace();
+    }
   }
 
   static String binarySearch(String target) {
