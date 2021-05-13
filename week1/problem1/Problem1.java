@@ -40,6 +40,7 @@ public class Problem1 {
       }
       br.close();
     } catch (Exception e) {
+      // ALEX_COMMENT:  if there's an exception here, do you really want to continue with the rest of the processing?
       e.printStackTrace();
     }
 
@@ -76,6 +77,9 @@ public class Problem1 {
       bw.close();
 
     }catch(IOException e){
+      // ALEX_COMMENT:  Great that you thought of catching the exception - 
+      //   but you probably want to convey that to the caller via the interface.
+      //    Currently, caller does not know.
       e.printStackTrace();
     }
   }
