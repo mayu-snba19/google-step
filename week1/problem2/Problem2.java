@@ -41,6 +41,7 @@ public class Problem2 {
     ArrayList<String> ans = new ArrayList<String>();
     int charScore[] = {1, 3, 2, 2, 1, 3, 3, 1, 1, 4, 4, 2, 2, 1, 1, 3, 4, 1, 1, 1, 2, 3, 3, 4, 3, 4};
 
+    //targetsに検索対象文字列を追加
     try {
       BufferedReader br = new BufferedReader(new FileReader(file));
       while (br.ready()) {
@@ -49,48 +50,60 @@ public class Problem2 {
       }
       br.close();
     } catch (Exception e) {
-      System.out.println(e);
+      e.printStackTrace();
+      System.exit(1);
     }
 
     Counter c = new Counter();
 
     for (String target : targets) {
-      int[] targetCnt = c.counter(target);
+      int[] targetCnt = c.counter(target); //単語に含まれるアルファベットの個数を数える
       int maxScore=0;
       String nowAns="";
 
       //辞書ファイルからアナグラムを見つける
       try {
         BufferedReader br = new BufferedReader(new FileReader("words.txt"));
+
         while (br.ready()) {
           String s = br.readLine();
           int nowScore=0;
           boolean boo=true;
 
+          //現在の最大スコアより文字列の長さ*4の方が小さければスキップ
           if(s.length()*4<maxScore) continue;
+
+          //文字の個数を数える
           int[] wordCnt = c.counter(s);
 
           for (int i = 0; i < 26; i++) {
-            //この単語は作れないのでスキップ
+            // 辞書の方がアルファベットの個数が少なければ作れないのでスキップ
             if (targetCnt[i] < wordCnt[i]){
               boo=false;
               break;
             }
+            //文字の得点をかけて現在のスコア合計に足す
             nowScore+=wordCnt[i]*charScore[i];
           }
+
           //高いスコアのものに更新
           if(boo && nowScore>maxScore){
             maxScore=nowScore;
             nowAns=s;
           }
         }
+
+        //答えのリストに追加
         ans.add(nowAns);
         br.close();
+
       } catch (Exception e) {
-        System.out.println(e);
+        e.printStackTrace();
+        System.exit(1);
       }
     }
 
+    //答えのリストから一行ずつ取り出して表示
     Iterator iterator = ans.iterator();
     while (iterator.hasNext()) {
       System.out.println(iterator.next());
