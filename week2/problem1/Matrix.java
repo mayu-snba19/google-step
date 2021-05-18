@@ -1,10 +1,6 @@
 class Matrix {
-  public static void main(String args[]) {
-    if (args.length != 1) {
-      System.out.println("usage: java Matrix N");
-      return;
-    }
-    int n = Integer.parseInt(args[0]);
+
+  public void run(int n) {
 
     double[][] a = new double[n][n]; // Matrix A
     double[][] b = new double[n][n]; // Matrix B
@@ -32,8 +28,7 @@ class Matrix {
     }
 
     long end = System.currentTimeMillis();
-    System.out.printf("time: %.6f sec\n", (end - begin) / 1000.0);
-
+    System.out.printf("%d %.3f\n",n,(end-begin)/1000.0);
     // Print C for debugging. Comment out the print before measuring the execution
     // time.
     double sum = 0;
@@ -45,6 +40,6 @@ class Matrix {
     }
     // Print out the sum of all values in C.
     // This should be 450 for N=3, 3680 for N=4, and 18250 for N=5.
-    System.out.printf("sum: %.6f\n", sum);
+    // System.out.printf("sum: %.6f\n", sum);
   }
 }
