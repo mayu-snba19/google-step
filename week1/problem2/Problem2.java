@@ -49,6 +49,7 @@ public class Problem2 {
       }
       br.close();
     } catch (Exception e) {
+      // ALEX_COMMENT:  same as exercise one: exception hidden, not handled
       System.out.println(e);
     }
 
@@ -78,7 +79,11 @@ public class Problem2 {
             }
             nowScore+=wordCnt[i]*charScore[i];
           }
+          
+          
           //高いスコアのものに更新
+          // ALEX_COMMENT: just confirm please (during group discussion):  will this read
+          //               the entire dictionary to find the highest score?
           if(boo && nowScore>maxScore){
             maxScore=nowScore;
             nowAns=s;
