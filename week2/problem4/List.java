@@ -1,3 +1,10 @@
+// ALEX_COMMENT:  This class has two jobs:
+ //              doubly-linked list for the items
+ //              hash-table for the nodes
+ //  You could have a nicer implementation if you had two classes,
+  //            one for each job above, 
+  //            along with a master class that uses the other 2 classes.
+  //   Then you can re-use each class individually
 public class List {
   Cell head;
   Cell table[];
@@ -5,6 +12,9 @@ public class List {
   int MAX_SIZE = 10;
 
   public List() {
+    // ALEX_COMMENT:  is there really a need to use space for the "special"  head cell?
+    //                 (note the strings "headurl" and "headpage" are not part of the data)
+    //                 This decision started with your design.
     head = new Cell("headurl", "headpage");
     head.next = head;
     head.prev = head;
@@ -56,6 +66,8 @@ public class List {
     int hashValue = hash(s);
     Cell c = null;
     boolean isFind = false;
+    // ALEX_COMMENT:  isFind (abvoe) was not used, apparently
+    
     // ハッシュテーブルを確認する
     for (int i = hashValue; i < table.length; i++) {
       if (table[i] == null) break; //これ以降は見つからないので止める
@@ -89,6 +101,8 @@ public class List {
         }
       }
     }
+    // ALEX_COMMENT:  not handling the case where the table is full 
+    //                (rare, especially with limited dictionary, for sure)
   }
 
   // ハッシュテーブルからCellを削除
