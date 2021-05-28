@@ -60,13 +60,19 @@ def evaluate(tokens):
     if tokens[index]['type'] == 'MULTI':
       tokens[index+1]['number'] *= tokens[index-1]['number']
       tokens[index-1]['number'] = 0
-      tokens[index]['type'] = 'PLUS'
-      index+=1
+      if(index-2 >= 0 and tokens[index-2]['type'] == 'MINUS'):
+        tokens[index]['type'] = 'MINUS'
+      else:
+        tokens[index]['type'] = 'PLUS'
+        index += 1
     if tokens[index]['type'] == 'DIVI':
-      tokens[index+1]['number'] = tokens[index-1]['number'] / tokens[index+1]['number']
+      tokens[index+1]['number'] = tokens[index -1]['number'] / tokens[index+1]['number']
       tokens[index-1]['number'] = 0
-      tokens[index]['type'] = 'PLUS'
-      index+=1
+      if(index-2 >= 0 and tokens[index-2]['type'] == 'MINUS'):
+        tokens[index]['type'] = 'MINUS'
+      else:
+        tokens[index]['type'] = 'PLUS'
+      index += 1
     index+=1
 
   index = 0
@@ -90,7 +96,7 @@ def calculate(line):
       break
     tokens = tokenize(line[left+1:right])
     nowans = evaluate(tokens)
-    line = line[:left]+str(nowans)+line[right+1:] #クエリを書き換える。
+    line = line[:left]+str(nowans)+line[right+1:] #括弧内を計算結果に書き換える。
   tokens = tokenize(line)
   ans = evaluate(tokens)
   return ans
@@ -118,16 +124,25 @@ def test(line):
 def runTest():
   print("==== Test started! ====")
   test("1+2")
-  test("1.0+2.1-3.0")
-  test("10*3/6+20.0")
-  test("2.4/0.6")
+  test("1.5+2.5")
+  test("1.5+2.5-3.0")
+  test("2*3")
+  test("2*3+2")
+  test("2+2*3")
+  test("2*3*2")
+  test("4/2+2")
+  test("2+4/2")
+  test("2*3*2")
+  test("8/2/2")
+  test("2*3+4*5")
+  test("8/2-4/2")
   test("(1.5+0.5)*3")
   test("2*(1.0-0.5)")
   test("(3.0-2.0)")
   test("(6.0+2.0)/(4.0)")
   test("(3.0+4*(2+1))/5")
   test("((3+4)*2+1)/5")
-
+  test("5*((3+4)*2+1)")
   print("==== Test finished! ====\n")
 
 runTest()
