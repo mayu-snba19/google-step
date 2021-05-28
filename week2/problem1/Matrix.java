@@ -27,6 +27,7 @@ class Matrix {
       }
     }
 
+    //  ALEX_COMMENT:  milisecond time resolution is often not enough.
     long end = System.currentTimeMillis();
     System.out.printf("%d %.3f\n",n,(end-begin)/1000.0);
     // Print C for debugging. Comment out the print before measuring the execution
