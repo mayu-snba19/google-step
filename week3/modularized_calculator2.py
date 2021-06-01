@@ -91,6 +91,9 @@ def evaluate(tokens):
 def calculate(line):
   # 括弧内を先に計算する。
   while True:
+    # ALEX_COMMENT:  the call below to findBracket parses the same strings
+    #                multiple times. Its an inefficiency.  Can you think  of a way
+    #                to avoid repeated parsing?
     (left, right) = findBracket(line)
     if left== -1:
       break
@@ -100,6 +103,8 @@ def calculate(line):
   tokens = tokenize(line)
   ans = evaluate(tokens)
   return ans
+
+# ALEX_COMMENT:  very good, conside comment
 
 # 括弧のペアを見つけたら括弧の範囲を返す。見つけられなかったら-1,-1
 def findBracket(line):
@@ -143,7 +148,10 @@ def runTest():
   test("(3.0+4*(2+1))/5")
   test("((3+4)*2+1)/5")
   test("5*((3+4)*2+1)")
-  print("==== Test finished! ====\n")
+  print("==== Test finished! ====\n")]
+  
+  # ALEX_COMMENT:  no testing for unmatched parenthesis or mal-formed expressions.
+  #                I have a feeling that findBracket is not able to detect those conditions
 
 runTest()
 

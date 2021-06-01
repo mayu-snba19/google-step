@@ -56,6 +56,12 @@ def evaluate(tokens):
   answer = 0
   tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
 
+  # ALEX_COMMENT:  impressed at the clarity of the code, really good!
+  
+  # ALEX_COMMENT:   the two loops below would be even easier to read if both of them
+  #                 were broken into two sub-functions of evaluate().  They perform
+  #                 fairly different tasks, so it makes sense to modularize that way
+  
   # 掛け算・割り算を先に処理
   index = 1
   while index < len(tokens):
@@ -101,7 +107,8 @@ def test(line):
   else:
     print("FAIL! (%s should be %f but was %f)" % (line, expectedAnswer, actualAnswer))
 
-
+#ALEX_COMMENT:  test code is best separate from the main processing code, in a different module.
+    
 # Add more tests to this function :)
 def runTest():
   print("==== Test started! ====")
