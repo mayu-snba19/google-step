@@ -1,33 +1,33 @@
 import java.io.*;
 import java.util.*;
 
-public class WikipediaSmall {
+public class Wikipedia {
   static Map<String, String> pages = new TreeMap<String, String>();;
   static Map<String, Set<String>> links = new TreeMap<String, Set<String>>();;
-  private static WikipediaSmall singleton = new WikipediaSmall();
+  private static Wikipedia singleton = new Wikipedia();
 
-  private WikipediaSmall(){
+  private Wikipedia() {
     inputFiles();
   }
 
-  public static WikipediaSmall getInstance(){
+  public static Wikipedia getInstance() {
     return singleton;
   }
 
   public static void main(String[] args) {
-    WikipediaSmall wiki = WikipediaSmall.getInstance();
+    Wikipedia wiki = Wikipedia.getInstance();
 
     String startPosi = wiki.getID("Google");
-    String goalPosi = wiki.getID("セグウェイ");
+    String goalPosi = wiki.getID("渋谷");
+
     ArrayList<String> answers = wiki.getPath(startPosi, goalPosi);
     wiki.printPath(answers);
-
   }
 
   // ファイル読み込み
   private void inputFiles() {
     try {
-      File pageFile = new File("data/pages_small.txt");
+      File pageFile = new File("data/pages.txt");
       Scanner pageReader = new Scanner(pageFile);
       while (pageReader.hasNextLine()) {
         String[] page = pageReader.nextLine().split("\t", 0);
@@ -36,7 +36,7 @@ public class WikipediaSmall {
       }
       pageReader.close();
 
-      File linkFile = new File("data/links_small.txt");
+      File linkFile = new File("data/links.txt");
       Scanner linkReader = new Scanner(linkFile);
       while (linkReader.hasNextLine()) {
         String[] link = linkReader.nextLine().split("\t", 0);
@@ -73,7 +73,7 @@ public class WikipediaSmall {
   ArrayList<String> getPath(String startPosi, String goalPosi) {
     boolean isFind = false; // 辿り着けるかどうか
 
-     // [東京(キー), 奈良・京都・大阪・東京(始点からキーまでの最短経路)]のように経路を保存する
+    // [東京(キー), 奈良・京都・大阪・東京(始点からキーまでの最短経路)]のように経路を保存する
     Map<String, ArrayList<String>> dir = new TreeMap<String, ArrayList<String>>();
 
     Deque<String> queue = new ArrayDeque<String>();
@@ -92,9 +92,10 @@ public class WikipediaSmall {
         isFind = true;
         break;
       }
-      if (links.get(s) == null) continue;
+      if (links.get(s) == null)
+        continue;
       for (String current : links.get(s)) {
-        if (!dir.containsKey(current)) { //既にこのノードに訪れたことがあれば、経路が記録されている。
+        if (!dir.containsKey(current)) { // 既にこのノードに訪れたことがあれば、経路が記録されている。
           queue.add(current);
           ArrayList<String> dirCurrent = new ArrayList<String>(dir.get(s));
           dirCurrent.add(current);
@@ -109,7 +110,7 @@ public class WikipediaSmall {
     return dir.get(goalPosi);
   }
 
-  void printPath(ArrayList<String>paths){
+  void printPath(ArrayList<String> paths) {
     for (String path : paths) {
       System.out.print(pages.get(path) + " ");
     }
