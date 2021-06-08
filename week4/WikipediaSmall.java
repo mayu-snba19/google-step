@@ -41,6 +41,11 @@ public class WikipediaSmall {
       while (linkReader.hasNextLine()) {
         String[] link = linkReader.nextLine().split("\t", 0);
         // link[0]: id (from), links[1]: id (to)
+        
+        // ALEX_COMMENT:  the code below searches links multiple times
+        //   1-  containsKey
+        //   2 - links.get(link[0])
+        //    I think you can remove the containsKey and just do a get()  early on
         if (!links.containsKey(link[0])) {
           links.put(link[0], new TreeSet<String>());
         }
