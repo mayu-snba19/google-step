@@ -92,6 +92,8 @@ public class WikipediaSmall {
         isFind = true;
         break;
       }
+      
+      // ALEX_COMMENT:  link.get(s) is called twice below - that is unnecessary.
       if (links.get(s) == null) continue;
       for (String current : links.get(s)) {
         if (!dir.containsKey(current)) { //既にこのノードに訪れたことがあれば、経路が記録されている。
