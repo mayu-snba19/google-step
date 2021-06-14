@@ -27,6 +27,7 @@ public class Tsp {
   void inputFile() {
     try {
       File file = new File("input_" + fileId + ".csv");
+      // ALEX_COMMENT:  great use of BufferedReader!
       BufferedReader br = new BufferedReader(new FileReader(file));
       br.readLine();
       int index = 0;
@@ -56,6 +57,9 @@ public class Tsp {
       isSwap = false;
       for (int i = 0; i < cities.size() - 1; i++) {
         for (int j = i + 1; j < cities.size() - 1; j++) {
+          // ALEX_COMMENT:  it would be good to get documentation explaining
+          //                why the logic below works.  This is a good place
+          //                to demonstrate with diagrams.
           City a = cities.get(i);
           City b = cities.get(i + 1);
           City c = cities.get(j);
@@ -93,7 +97,7 @@ public class Tsp {
     while (!unVisited.isEmpty()) {
       City a = route.get(route.size() - 1);
       City next = null;
-      double minDistance = Double.MAX_VALUE;
+      double minDistance = Double.MAX_VALUE; // ALEX_COMMENT: This is good.  But using the first element would be best
       for (City c : unVisited) {
         if (distance(a, c) < minDistance) {
           minDistance = distance(a, c);
