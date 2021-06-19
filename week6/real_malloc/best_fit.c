@@ -46,13 +46,28 @@ void my_initialize() {
 }
 
 void *my_malloc(size_t size) {
-  metadata_t *metadata = heap.free_head;
-  metadata_t *prev = NULL;
+  metadata_t *metadata = heap.free_head->next;
+  metadata_t *prev = metadata;
+  metadata_t *min_metadata = NULL;
+  metadata_t *prev_min_metadata = NULL;
 
-  while (metadata && metadata->size < size) {
+  while(metadata){
     prev = metadata;
     metadata = metadata->next;
+    if(!metadata) break;
+
+    if(metadata->size >= size){
+      if(!min_metadata){
+        prev_min_metadata = prev;
+        min_metadata = metadata;
+      }else if(metadata->size < min_metadata->size){
+        prev_min_metadata = prev;
+        min_metadata = metadata;
+      }
+    }
   }
+  prev = prev_min_metadata;
+  metadata = min_metadata;
 
   if (!metadata) {
     size_t buffer_size = 4096;
