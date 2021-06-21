@@ -49,6 +49,9 @@ void *my_malloc(size_t size) {
   metadata_t *metadata = heap.free_head->next;
   metadata_t *prev = metadata;
   metadata_t *min_metadata = NULL;
+  // ALEX_COMMENT:  Good work tracking the min_metadata in a pointer!
+  //                it shows good grasp of C pointer usage.
+  
   metadata_t *prev_min_metadata = NULL;
 
   while(metadata){
@@ -58,6 +61,9 @@ void *my_malloc(size_t size) {
 
     if(metadata->size >= size){
       if(!min_metadata){
+        // ALEX_COMMENT:  the if above is great, in that it does not use any hardcoded initializer.
+        //                however, you pay the cost of the if in every iteration of the loop.
+        //                can you think of a way to make this special decision before the loop?
         prev_min_metadata = prev;
         min_metadata = metadata;
       }else if(metadata->size < min_metadata->size){
