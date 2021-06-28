@@ -23,9 +23,9 @@ python output_verifier.py
 
 ### プログラム構成
 
-- [OutputGenerator.java](https://github.com/mayu-snba19/google-step/blob/master/week5/OutputGenerator.java) : Tsp.java を全ての input\_{number}.csv に対して動かす。
-- [Tsp.java](https://github.com/mayu-snba19/google-step/blob/master/week5/Tsp.java) : 与えられたファイルに対してできるだけ最短になるような経路を求めるプログラム。
-- [City.java](https://github.com/mayu-snba19/google-step/blob/master/week5/City.java) : 街の情報
+- [OutputGenerator.java](https://github.com/mayu-snba19/google-step/blob/master/week7/OutputGenerator.java) : Tsp.java を全ての input\_{number}.csv に対して動かす。
+- [Tsp.java](https://github.com/mayu-snba19/google-step/blob/master/week7/Tsp.java) : 与えられたファイルに対してできるだけ最短になるような経路を求めるプログラム。
+- [City.java](https://github.com/mayu-snba19/google-step/blob/master/week7/City.java) : 街の情報
 
 ### このプログラムについて
 
