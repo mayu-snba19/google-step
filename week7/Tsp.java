@@ -11,7 +11,7 @@ public class Tsp {
   int nodeNum;
   City cities[];
   Random random;
-  double endTime = 50000;
+  int times = 400;
 
   public Tsp(int fileId, int nodeNum) {
     this.fileId = fileId;
@@ -20,18 +20,18 @@ public class Tsp {
     random = new Random();
   }
 
+  void setTimes(int times) {
+    this.times = times;
+  }
+
   void run() {
     inputFile();
     solveGreedy(); // 貪欲法
-    sortCities(); // 交差を無くす
+    // sortCities(); // 交差を無くす
     sa(); // 焼きなまし法
     sortCities(); // 交差を無くす
     outputFile();
-    System.out.println("score : " + calcAllCost());
-  }
-
-  void setEndTime(double endTime) {
-    this.endTime = endTime;
+    System.out.println("score" + fileId + " : " + calcAllCost());
   }
 
   void inputFile() {
@@ -56,6 +56,11 @@ public class Tsp {
     return Math.sqrt(Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2));
   }
 
+  // コストと回数から交換可能性を計算する。コストが大きいほど交換される可能性は高くなり、残り時間が長いほど交換されやすい。
+  double calcProbability(double cost, double t) {
+    return Math.exp(-cost / t);
+  }
+
   void sortCities() {
     boolean isSwap = true;
     while (isSwap) {
@@ -67,7 +72,7 @@ public class Tsp {
           City c = cities[j];
           City d = cities[j + 1];
           double cost = calcCost(a, b, c, d);
-          if (cost > 0.01) {
+          if (cost < -0.001) {
             for (int k = 0; k < (j - i) / 2; k++) {
               City tmp = cities[j - k];
               cities[j - k] = cities[i + 1 + k];
@@ -84,7 +89,7 @@ public class Tsp {
         City c = cities[nodeNum - 1];
         City d = cities[0];
         double cost = calcCost(a, b, c, d);
-        if (cost > 0.01) {
+        if (cost < -0.001) {
           for (int k = 0; k < (nodeNum - 1 - i) / 2; k++) {
             City tmp = cities[(i + 1 + k) % nodeNum];
             cities[(i + 1 + k) % nodeNum] = cities[nodeNum - 1 - k];
@@ -96,8 +101,9 @@ public class Tsp {
     }
   }
 
+  // 交換した際のコストを計算する。（元より短くなるなら、正の値を取る。）
   double calcCost(City a, City b, City c, City d) {
-    return distance(a, b) + distance(c, d) - distance(a, c) - distance(b, d);
+    return distance(a, c) + distance(b, d) - distance(a, b) - distance(c, d);
   }
 
   // 現在の位置から最も近い頂点を次の行き先にする。
@@ -127,21 +133,21 @@ public class Tsp {
 
   // 焼きなまし法
   void sa() {
-    for (int t = 1; t <= endTime; t++) {
-      for (int cnt = 0; cnt < nodeNum; cnt++) {
-        int i = random.nextInt(nodeNum - 1);
-        int j = random.nextInt(nodeNum - 1);
-        City a = cities[i];
-        City b = cities[i + 1];
-        City c = cities[j];
-        City d = cities[j + 1];
-        double cost = calcCost(a, b, c, d);
-        double forceSwap = (endTime - t) / endTime;
-        if (cost > 0.01 || forceSwap > random.nextDouble()) {
-          for (int k = 0; k < (j - i) / 2; k++) {
-            City tmp = cities[j - k];
-            cities[j - k] = cities[i + 1 + k];
-            cities[i + 1 + k] = tmp;
+    for (int t = times; t >= 1; t--) {
+      for (int i = 0; i < nodeNum - 1; i++) {
+        for (int j = i + 1; j < nodeNum - 1; j++) {
+          City a = cities[i];
+          City b = cities[i + 1];
+          City c = cities[j];
+          City d = cities[j + 1];
+          double cost = calcCost(a, b, c, d);
+          double prob = calcProbability(cost, t);
+          if (cost < -0.001 || random.nextDouble() <= prob) {
+            for (int k = 0; k < (j - i) / 2; k++) {
+              City tmp = cities[j - k];
+              cities[j - k] = cities[i + 1 + k];
+              cities[i + 1 + k] = tmp;
+            }
           }
         }
       }
